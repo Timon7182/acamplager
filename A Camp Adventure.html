@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A+ Camp — Жазғы лагерь · Astana Adventure 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --cream: #F8EFD9;
+      --cream-2: #F1E4C2;
+      --paper: #FFFBF0;
+      --sky: #BCE3F0;
+      --sky-2: #D8EFF6;
+      --ink: #2A2620;
+      --leaf: #6FAE52;
+      --leaf-2: #4F8B3E;
+      --grass: #C9DC8B;
+      --gold: #F4C148;
+      --coral: #E8675D;
+      --pink: #F4ABB6;
+      --sand: #EFD9A8;
+      --blue: #6FB7E6;
+      --water: #98D2E6;
+    }
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    .font-bubble { font-family: 'Fredoka', sans-serif; font-weight: 700; letter-spacing: -0.01em; }
+    .font-hand { font-family: 'Caveat', cursive; font-weight: 700; }
+    .font-marker { font-family: 'Patrick Hand', cursive; }
+
+    /* Bubble letter — chunky with white stroke + offset shadow */
+    .bubble {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      display: inline-block;
+      -webkit-text-stroke: 10px #FFFBF0;
+      paint-order: stroke fill;
+      filter: drop-shadow(0 5px 0 rgba(42,38,32,0.25));
+      line-height: 0.85;
+    }
+    .bubble-sm {
+      -webkit-text-stroke: 5px #FFFBF0;
+      filter: drop-shadow(0 3px 0 rgba(42,38,32,0.22));
+    }
+    .bubble-xs {
+      -webkit-text-stroke: 3.5px #FFFBF0;
+      filter: drop-shadow(0 2px 0 rgba(42,38,32,0.2));
+    }
+
+    /* Polaroid */
+    .polaroid {
+      background: #FFFBF0;
+      padding: 10px 10px 38px 10px;
+      box-shadow: 0 12px 28px -10px rgba(42,38,32,0.28), 0 2px 0 rgba(42,38,32,0.05);
+      border-radius: 4px;
+      position: relative;
+    }
+    .polaroid img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .polaroid::after {
+      content: "";
+      position: absolute;
+      top: -18px; left: 50%;
+      transform: translateX(-50%) rotate(-3deg);
+      width: 70px; height: 22px;
+      background: rgba(244, 193, 72, 0.6);
+      border: 1px dashed rgba(42,38,32,0.18);
+      box-shadow: 0 2px 6px rgba(42,38,32,0.12);
+    }
+
+    /* Tape (washi) */
+    .tape {
+      position: absolute;
+      width: 90px; height: 26px;
+      background: rgba(232, 103, 93, 0.55);
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 3px 8px rgba(42,38,32,0.18);
+    }
+    .tape::before, .tape::after {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0; width: 6px;
+      background: repeating-linear-gradient(45deg, transparent 0 3px, rgba(42,38,32,0.08) 3px 4px);
+    }
+    .tape::before { left: 0; }
+    .tape::after { right: 0; }
+
+    /* Pin */
+    .pin {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #FF8B7A, #C0463E);
+      box-shadow: 0 4px 8px rgba(42,38,32,0.4), inset -2px -2px 4px rgba(0,0,0,0.18);
+    }
+
+    /* Cloud */
+    @keyframes drift {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(40px); }
+    }
+    .cloud { animation: drift 12s ease-in-out infinite alternate; }
+
+    /* Sway leaves */
+    @keyframes sway {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+    }
+    .sway { transform-origin: bottom center; animation: sway 5s ease-in-out infinite; }
+    .sway-slow { animation: sway 7s ease-in-out infinite; }
+    .sway-fast { animation: sway 4s ease-in-out infinite; }
+
+    /* Bounce on hover */
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .bob { animation: bob 2.4s ease-in-out infinite; }
+
+    /* Wavy water shimmer */
+    @keyframes shimmer {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-40px); }
+    }
+    .water-shimmer { animation: shimmer 8s linear infinite; }
+
+    /* Squiggle underline */
+    .squiggle {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 12'><path d='M2 8 Q 22 0, 42 8 T 82 8 T 122 8 T 162 8' stroke='%23E8675D' stroke-width='3' fill='none' stroke-linecap='round'/></svg>");
+      background-repeat: no-repeat;
+      background-position: bottom center;
+      background-size: 100% 10px;
+      padding-bottom: 14px;
+    }
+
+    /* Sticker badge */
+    .sticker-tag {
+      background: var(--paper);
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      padding: 8px 18px;
+      box-shadow: 0 4px 0 var(--ink);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .sticker-tag:hover { transform: translate(-1px, -2px); box-shadow: 0 6px 0 var(--ink); }
+    .sticker-tag:active { transform: translate(0, 2px); box-shadow: 0 0 0 var(--ink); }
+
+    /* Big CTA */
+    .cta-big {
+      background: var(--coral);
+      color: var(--paper);
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      box-shadow: 0 5px 0 var(--ink);
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .cta-big:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--ink); }
+    .cta-big:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.7s cubic-bezier(.2,.8,.2,1); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 12px; height: 12px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--ink); border: 3px solid var(--cream); border-radius: 6px; }
+
+    /* Paper texture noise */
+    .paper-noise::after {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.15 0 0 0 0 0.13 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      mix-blend-mode: multiply;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    /* Stamp */
+    .stamp {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--coral);
+      border: 3px solid var(--coral);
+      padding: 4px 10px;
+      transform: rotate(-6deg);
+      display: inline-block;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" data-presets="react">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    // ───────── DATA ─────────
+    const _img = (u) => (typeof window !== 'undefined' && window.__resources && window.__resources[u]) || u;
+
+    const PHOTOS = {
+      kid1: _img('https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=500&q=80'),
+      kid2: _img('https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=500&q=80'),
+      kid3: _img('https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=500&q=80'),
+      kid4: _img('https://images.unsplash.com/photo-1611162616475-46b635cb6868?auto=format&fit=crop&w=500&q=80'),
+      kid5: _img('https://images.unsplash.com/photo-1596496050755-c923e73e42e1?auto=format&fit=crop&w=500&q=80'),
+      kid6: _img('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=500&q=80'),
+      kid7: _img('https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=500&q=80'),
+    };
+
+    const PROGRAMS = [
+      { id: 'astanapolis', title: 'Astanapolis', sub: 'Город будущего', color: '#6FB7E6', strap: 'STEM · Инженерия', age: '7–11', price: '11 500', photo: PHOTOS.kid4 },
+      { id: 'sport',       title: 'Sport Camp', sub: 'Большой теннис', color: '#9DC771', strap: 'Спорт · Здоровье',  age: '6–11', price: '10 900', photo: PHOTOS.kid3 },
+      { id: 'english',     title: 'English',    sub: 'IELTS · Cambridge', color: '#F4ABB6', strap: 'Английский', age: '8–11', price: '11 500', photo: PHOTOS.kid7 },
+      { id: 'brain',       title: 'Brain Pack', sub: '10 в 1 · Соробан', color: '#F4C148', strap: 'Мышление', age: '6–10', price: '9 900', photo: PHOTOS.kid5 },
+      { id: 'arts',        title: 'Arts & Vibe',sub: 'Креатив · Digital', color: '#E8675D', strap: 'Творчество', age: '8–11', price: '10 500', photo: PHOTOS.kid6 },
+    ];
+
+    // ───────── HOOKS ─────────
+    function useReveal() {
+      const ref = useRef(null);
+      useEffect(() => {
+        const el = ref.current; if (!el) return;
+        const id = requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
+        return () => cancelAnimationFrame(id);
+      }, []);
+      return ref;
+    }
+    function Reveal({ children, delay = 0, className = '' }) {
+      const r = useReveal();
+      return <div ref={r} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>{children}</div>;
+    }
+
+    // ───────── ASTANA SCENE (SVG illustrated) ─────────
+    function AstanaScene() {
+      return (
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"
+             className="absolute inset-0 w-full h-full" aria-hidden>
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#BCE3F0"/>
+              <stop offset="0.55" stopColor="#D8EFF6"/>
+              <stop offset="1" stopColor="#F1E4C2"/>
+            </linearGradient>
+            <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#98D2E6"/>
+              <stop offset="1" stopColor="#6FB7E6"/>
+            </linearGradient>
+            <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#C9DC8B"/>
+              <stop offset="1" stopColor="#9DC771"/>
+            </linearGradient>
+            <pattern id="brick" width="14" height="14" patternUnits="userSpaceOnUse">
+              <rect width="14" height="14" fill="none"/>
+              <circle cx="2" cy="2" r="0.6" fill="rgba(42,38,32,0.16)"/>
+            </pattern>
+          </defs>
+
+          {/* Sky */}
+          <rect width="1600" height="900" fill="url(#sky)"/>
+
+          {/* Clouds */}
+          <g className="cloud" opacity="0.85">
+            <ellipse cx="180" cy="160" rx="80" ry="20" fill="#FFFBF0"/>
+            <ellipse cx="220" cy="150" rx="50" ry="22" fill="#FFFBF0"/>
+            <ellipse cx="150" cy="155" rx="40" ry="18" fill="#FFFBF0"/>
+          </g>
+          <g className="cloud" opacity="0.8" style={{ animationDelay: '-3s', animationDuration: '15s' }}>
+            <ellipse cx="1300" cy="120" rx="100" ry="24" fill="#FFFBF0"/>
+            <ellipse cx="1360" cy="108" rx="55" ry="22" fill="#FFFBF0"/>
+            <ellipse cx="1250" cy="115" rx="42" ry="18" fill="#FFFBF0"/>
+          </g>
+          <g className="cloud" opacity="0.75" style={{ animationDelay: '-6s', animationDuration: '18s' }}>
+            <ellipse cx="780" cy="90" rx="70" ry="18" fill="#FFFBF0"/>
+            <ellipse cx="820" cy="80" rx="40" ry="16" fill="#FFFBF0"/>
+          </g>
+
+          {/* Distant mountain steppe layers */}
+          <path d="M0 540 L 200 470 L 380 510 L 540 460 L 720 500 L 880 470 L 1080 510 L 1280 470 L 1460 500 L 1600 480 L 1600 600 L 0 600 Z"
+                fill="#A6D2E0" opacity="0.65"/>
+          <path d="M0 580 L 180 530 L 360 560 L 540 520 L 720 555 L 920 530 L 1100 560 L 1280 535 L 1460 560 L 1600 540 L 1600 660 L 0 660 Z"
+                fill="#88BCD0" opacity="0.55"/>
+
+          {/* Astana skyline silhouette — middle ground */}
+          <g transform="translate(0 350)">
+            {/* Distant low buildings */}
+            <g fill="#D9E5C1" opacity="0.85">
+              <rect x="60"  y="120" width="40" height="80"/>
+              <rect x="110" y="100" width="30" height="100"/>
+              <rect x="148" y="110" width="50" height="90"/>
+              <rect x="210" y="90"  width="34" height="110"/>
+              <rect x="1300" y="110" width="50" height="90"/>
+              <rect x="1360" y="100" width="36" height="100"/>
+              <rect x="1410" y="120" width="46" height="80"/>
+              <rect x="1470" y="95"  width="32" height="105"/>
+              <rect x="1510" y="115" width="50" height="85"/>
+            </g>
+
+            {/* Khan Shatyr (tent) — left middleground */}
+            <g transform="translate(280 80)" className="sway-slow" style={{ transformOrigin: '60px 130px' }}>
+              <path d="M0 130 Q 60 -10 120 130 Z" fill="#9DC0CC" stroke="#2A2620" strokeWidth="3" strokeLinejoin="round"/>
+              <path d="M0 130 Q 60 -10 120 130" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2"/>
+              <line x1="60" y1="-10" x2="60" y2="130" stroke="rgba(42,38,32,0.25)" strokeWidth="1.5" strokeDasharray="4 4"/>
+              <ellipse cx="60" cy="-10" rx="6" ry="6" fill="#F4C148" stroke="#2A2620" strokeWidth="2"/>
+              <rect x="0" y="125" width="120" height="6" fill="#2A2620"/>
+            </g>
+
+            {/* Baiterek — center */}
+            <g transform="translate(740 -10)">
+              {/* base */}
+              <rect x="50" y="200" width="40" height="20" fill="#2A2620"/>
+              {/* legs */}
+              <path d="M 56 200 Q 50 130 55 80 L 60 80 Q 60 130 64 200 Z" fill="#F1E4C2" stroke="#2A2620" strokeWidth="2.5"/>
+              <path d="M 84 200 Q 90 130 85 80 L 80 80 Q 80 130 76 200 Z" fill="#F1E4C2" stroke="#2A2620" strokeWidth="2.5"/>
+              {/* support net */}
+              <path d="M 56 120 Q 70 110 84 120 M 56 150 Q 70 140 84 150 M 56 180 Q 70 170 84 180" stroke="#2A2620" strokeWidth="1.5" fill="none" opacity="0.4"/>
+              {/* upper stem */}
+              <rect x="68" y="40" width="4" height="60" fill="#2A2620"/>
+              {/* golden sphere */}
+              <g>
+                <circle cx="70" cy="35" r="24" fill="#F4C148" stroke="#2A2620" strokeWidth="3"/>
+                <circle cx="70" cy="35" r="24" fill="url(#brick)"/>
+                <path d="M 56 35 Q 70 18 84 35" fill="none" stroke="rgba(42,38,32,0.3)" strokeWidth="1.5"/>
+                <circle cx="63" cy="28" r="4" fill="rgba(255,255,255,0.6)"/>
+              </g>
+              {/* antenna */}
+              <line x1="70" y1="11" x2="70" y2="0" stroke="#2A2620" strokeWidth="2"/>
+              <circle cx="70" cy="-2" r="2" fill="#E8675D"/>
+            </g>
+
+            {/* EXPO sphere — right */}
+            <g transform="translate(1080 60)" className="sway" style={{ transformOrigin: '70px 140px', animationDuration: '8s' }}>
+              {/* base */}
+              <rect x="55" y="135" width="30" height="14" fill="#2A2620"/>
+              {/* sphere */}
+              <g>
+                <circle cx="70" cy="100" r="46" fill="#BCE3F0" stroke="#2A2620" strokeWidth="3"/>
+                <ellipse cx="70" cy="100" rx="46" ry="14" fill="none" stroke="#2A2620" strokeWidth="2" opacity="0.45"/>
+                <ellipse cx="70" cy="100" rx="46" ry="28" fill="none" stroke="#2A2620" strokeWidth="1.5" opacity="0.35"/>
+                <line x1="24" y1="100" x2="116" y2="100" stroke="#2A2620" strokeWidth="1.5" opacity="0.5"/>
+                <line x1="70" y1="54" x2="70" y2="146" stroke="#2A2620" strokeWidth="1.5" opacity="0.5"/>
+                <circle cx="58" cy="86" r="6" fill="rgba(255,255,255,0.65)"/>
+              </g>
+            </g>
+
+            {/* Other Astana towers — right side */}
+            <g transform="translate(1240 30)">
+              <rect x="0" y="80" width="44" height="170" fill="#F1E4C2" stroke="#2A2620" strokeWidth="2.5"/>
+              <rect x="6" y="90" width="32" height="6" fill="#6FB7E6"/>
+              <rect x="6" y="106" width="32" height="6" fill="#6FB7E6"/>
+              <rect x="6" y="122" width="32" height="6" fill="#6FB7E6"/>
+              <rect x="6" y="138" width="32" height="6" fill="#6FB7E6"/>
+              <rect x="6" y="154" width="32" height="6" fill="#6FB7E6"/>
+              <rect x="6" y="170" width="32" height="6" fill="#6FB7E6"/>
+              <rect x="6" y="186" width="32" height="6" fill="#6FB7E6"/>
+              <path d="M 0 80 L 22 50 L 44 80" fill="#E8675D" stroke="#2A2620" strokeWidth="2.5"/>
+            </g>
+
+            {/* Blue twin towers */}
+            <g transform="translate(520 -30)">
+              <rect x="0" y="100" width="36" height="200" fill="#6FB7E6" stroke="#2A2620" strokeWidth="2.5"/>
+              <rect x="46" y="80" width="36" height="220" fill="#6FB7E6" stroke="#2A2620" strokeWidth="2.5"/>
+              <g fill="rgba(42,38,32,0.18)">
+                {[...Array(8)].map((_,i) => <rect key={i} x="6" y={120 + i*20} width="24" height="4"/>)}
+                {[...Array(9)].map((_,i) => <rect key={i} x="52" y={100 + i*20} width="24" height="4"/>)}
+              </g>
+              <path d="M 0 100 L 18 78 L 36 100" fill="#F4C148" stroke="#2A2620" strokeWidth="2.5"/>
+              <path d="M 46 80 L 64 58 L 82 80" fill="#F4C148" stroke="#2A2620" strokeWidth="2.5"/>
+            </g>
+          </g>
+
+          {/* Foreground grass band */}
+          <path d="M 0 620 Q 200 600 400 615 T 800 615 T 1200 615 T 1600 615 L 1600 900 L 0 900 Z" fill="url(#grass)"/>
+          <path d="M 0 660 Q 300 640 600 655 T 1200 655 T 1600 650 L 1600 900 L 0 900 Z" fill="#9DC771" opacity="0.7"/>
+
+          {/* Grass blades */}
+          <g stroke="#4F8B3E" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.85">
+            {[...Array(40)].map((_,i) => {
+              const x = i * 40 + (i%2 ? 10 : 25);
+              return <path key={i} d={`M ${x} 680 q -2 -10 0 -22`}/>;
+            })}
+          </g>
+
+          {/* Tulips & flowers (Kazakh steppe motif) */}
+          {[
+            { x: 120, c: '#E8675D' }, { x: 260, c: '#F4C148' }, { x: 410, c: '#F4ABB6' },
+            { x: 1100, c: '#E8675D' }, { x: 1320, c: '#F4C148' }, { x: 1490, c: '#E8675D' }
+          ].map((f, i) => (
+            <g key={i} transform={`translate(${f.x} 740)`}>
+              <path d="M 0 0 q -2 -20 0 -36" stroke="#4F8B3E" strokeWidth="3" fill="none" strokeLinecap="round"/>
+              <path d="M -8 -36 Q 0 -50 8 -36 Q 6 -28 0 -28 Q -6 -28 -8 -36 Z" fill={f.c} stroke="#2A2620" strokeWidth="2"/>
+              <ellipse cx="-4" cy="-12" rx="6" ry="3" fill="#6FAE52" stroke="#2A2620" strokeWidth="1.5"/>
+            </g>
+          ))}
+
+          {/* Trees on edges — like reference */}
+          <g transform="translate(20 240)" className="sway">
+            <rect x="60" y="280" width="22" height="160" fill="#8B5E3C" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="71" cy="260" rx="92" ry="100" fill="#6FAE52" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="30" cy="295" rx="60" ry="70" fill="#4F8B3E" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="120" cy="305" rx="55" ry="65" fill="#4F8B3E" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="71" cy="225" rx="60" ry="56" fill="#7FBD5D" stroke="#2A2620" strokeWidth="3"/>
+            {/* dots */}
+            <g fill="rgba(42,38,32,0.25)">
+              <circle cx="50" cy="240" r="3"/><circle cx="90" cy="270" r="3"/><circle cx="30" cy="290" r="3"/>
+              <circle cx="110" cy="285" r="3"/><circle cx="75" cy="210" r="3"/>
+            </g>
+          </g>
+
+          <g transform="translate(1460 220)" className="sway-slow">
+            <rect x="60" y="280" width="20" height="170" fill="#8B5E3C" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="70" cy="250" rx="100" ry="110" fill="#6FAE52" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="20" cy="290" rx="60" ry="70" fill="#4F8B3E" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="125" cy="295" rx="55" ry="65" fill="#4F8B3E" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="68" cy="215" rx="60" ry="56" fill="#7FBD5D" stroke="#2A2620" strokeWidth="3"/>
+            <g fill="rgba(42,38,32,0.25)">
+              <circle cx="55" cy="240" r="3"/><circle cx="95" cy="275" r="3"/><circle cx="25" cy="305" r="3"/>
+              <circle cx="115" cy="290" r="3"/><circle cx="65" cy="205" r="3"/>
+            </g>
+          </g>
+
+          {/* Bushes foreground */}
+          <g>
+            <ellipse cx="180" cy="720" rx="100" ry="40" fill="#7FBD5D" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="140" cy="710" rx="50" ry="30" fill="#6FAE52" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="220" cy="715" rx="45" ry="28" fill="#6FAE52" stroke="#2A2620" strokeWidth="3"/>
+          </g>
+          <g>
+            <ellipse cx="1420" cy="730" rx="110" ry="42" fill="#7FBD5D" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="1370" cy="720" rx="55" ry="32" fill="#6FAE52" stroke="#2A2620" strokeWidth="3"/>
+            <ellipse cx="1470" cy="725" rx="50" ry="30" fill="#6FAE52" stroke="#2A2620" strokeWidth="3"/>
+          </g>
+
+          {/* Sun rays (subtle) */}
+          <g transform="translate(800 200)" opacity="0.4">
+            <circle r="42" fill="#F4C148"/>
+            <g stroke="#F4C148" strokeWidth="3" strokeLinecap="round">
+              {[...Array(12)].map((_,i) => {
+                const a = (i/12)*Math.PI*2;
+                const x1 = Math.cos(a)*55, y1 = Math.sin(a)*55;
+                const x2 = Math.cos(a)*72, y2 = Math.sin(a)*72;
+                return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}/>;
+              })}
+            </g>
+          </g>
+
+          {/* Stars/sparkles */}
+          {[ {x: 400, y: 200, r: 4}, {x: 1180, y: 220, r: 3}, {x: 1050, y: 380, r: 3} ].map((s,i) => (
+            <g key={i} transform={`translate(${s.x} ${s.y})`}>
+              <path d={`M 0 -${s.r*2} L ${s.r/2} -${s.r/2} L ${s.r*2} 0 L ${s.r/2} ${s.r/2} L 0 ${s.r*2} L -${s.r/2} ${s.r/2} L -${s.r*2} 0 L -${s.r/2} -${s.r/2} Z`}
+                    fill="#F4C148" stroke="#2A2620" strokeWidth="1.5"/>
+            </g>
+          ))}
+
+          {/* Birds */}
+          <g stroke="#2A2620" strokeWidth="2.5" fill="none" strokeLinecap="round">
+            <path d="M 380 240 q 6 -8 12 0 q 6 -8 12 0"/>
+            <path d="M 1180 280 q 5 -6 10 0 q 5 -6 10 0"/>
+          </g>
+        </svg>
+      );
+    }
+
+    // ───────── BUBBLE WORDMARK ─────────
+    function BubbleWordmark() {
+      // A + C A M P, each letter a color
+      const letters = [
+        { ch: 'A', color: '#E8675D' },
+        { ch: '+', color: '#F4C148', sub: true },
+        { ch: 'C', color: '#6FB7E6' },
+        { ch: 'A', color: '#9DC771' },
+        { ch: 'M', color: '#F4ABB6' },
+        { ch: 'P', color: '#E8675D' },
+      ];
+      return (
+        <div className="bubble inline-flex items-baseline gap-[2px] sm:gap-[6px]"
+             style={{ fontSize: 'clamp(78px, 16vw, 220px)' }}>
+          {letters.map((l, i) => (
+            <span key={i} style={{
+              color: l.color,
+              transform: `rotate(${(i % 2 === 0 ? -1 : 1) * (l.sub ? 2 : 4)}deg) translateY(${i === 1 ? '-4%' : '0'})`,
+              fontSize: l.sub ? '0.6em' : '1em',
+              display: 'inline-block',
+            }}>{l.ch}</span>
+          ))}
+        </div>
+      );
+    }
+
+    // ───────── HERO ─────────
+    function Hero() {
+      return (
+        <section className="relative overflow-hidden paper-noise">
+          {/* Scene */}
+          <div className="absolute inset-0">
+            <AstanaScene/>
+          </div>
+
+          {/* Content overlay */}
+          <div className="relative pt-10 pb-32 lg:pt-16 lg:pb-44">
+            {/* Top sticker badge */}
+            <div className="flex justify-center mb-8">
+              <Reveal>
+                <div className="sticker-tag inline-flex items-center gap-2 font-bubble" style={{ fontSize: 18, color: 'var(--coral)' }}>
+                  <span className="w-2 h-2 rounded-full" style={{ background: 'var(--coral)' }}/>
+                  ЖАЗҒЫ ЛАГЕРЬ · 2026
+                  <span className="w-2 h-2 rounded-full" style={{ background: 'var(--coral)' }}/>
+                </div>
+              </Reveal>
+            </div>
+
+            {/* Wordmark */}
+            <div className="flex justify-center mb-2">
+              <Reveal delay={100}>
+                <BubbleWordmark/>
+              </Reveal>
+            </div>
+
+            {/* Tagline ribbon */}
+            <Reveal delay={250}>
+              <div className="relative max-w-[820px] mx-auto px-5">
+                <div className="bubble bubble-sm text-center" style={{ fontSize: 'clamp(20px, 3.2vw, 38px)', color: '#E8675D' }}>
+                  ASTANA ADVENTURE · 6–11 ЛЕТ
+                </div>
+                <svg className="block mx-auto mt-1" width="240" height="14" viewBox="0 0 240 14" fill="none">
+                  <path d="M3 9 Q 30 1, 60 8 T 120 8 T 180 8 T 237 6" stroke="#2A2620" strokeWidth="3" fill="none" strokeLinecap="round"
+                        strokeDasharray="6 5"/>
+                </svg>
+              </div>
+            </Reveal>
+
+            {/* CTA + meta */}
+            <Reveal delay={400}>
+              <div className="mt-10 flex flex-col items-center gap-4">
+                <a href="#book" className="cta-big font-bubble px-8 py-4 text-[20px] flex items-center gap-3">
+                  Забронировать смену
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <div className="font-marker text-[18px]" style={{ color: 'rgba(42,38,32,0.7)' }}>
+                  от <span className="font-bubble" style={{ color: '#E8675D' }}>9 900 ₸</span> / день · полный день 8:40 – 18:00
+                </div>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Polaroid photos overlaid */}
+          <Reveal delay={500}>
+            <div className="absolute left-[3%] top-[55%] -rotate-[8deg] w-28 sm:w-36 hidden sm:block z-10">
+              <div className="polaroid">
+                <div className="tape" style={{ top: -12, left: '50%', transform: 'translateX(-50%) rotate(-4deg)' }}></div>
+                <div className="aspect-[4/5] overflow-hidden">
+                  <img src={PHOTOS.kid1} alt="" className="photo-warm"/>
+                </div>
+                <div className="absolute bottom-2 left-0 right-0 text-center font-hand text-[15px]" style={{ color: '#2A2620' }}>теннис ✨</div>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={600}>
+            <div className="absolute right-[2%] top-[60%] rotate-[10deg] w-28 sm:w-36 hidden sm:block z-10">
+              <div className="polaroid">
+                <div className="tape" style={{ top: -12, left: '50%', transform: 'translateX(-50%) rotate(8deg)', background: 'rgba(111, 183, 230, 0.6)' }}></div>
+                <div className="aspect-[4/5] overflow-hidden">
+                  <img src={PHOTOS.kid2} alt="" className="photo-warm"/>
+                </div>
+                <div className="absolute bottom-2 left-0 right-0 text-center font-hand text-[15px]">Demo Day</div>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={700}>
+            <div className="absolute left-[15%] bottom-[8%] rotate-[6deg] w-24 sm:w-32 hidden md:block z-10">
+              <div className="polaroid">
+                <div className="aspect-square overflow-hidden">
+                  <img src={PHOTOS.kid3} alt="" className="photo-warm"/>
+                </div>
+                <div className="absolute bottom-2 left-0 right-0 text-center font-hand text-[14px]">Sport · 2025</div>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={800}>
+            <div className="absolute right-[14%] bottom-[6%] -rotate-[7deg] w-24 sm:w-32 hidden md:block z-10">
+              <div className="polaroid">
+                <div className="aspect-square overflow-hidden">
+                  <img src={PHOTOS.kid4} alt="" className="photo-warm"/>
+                </div>
+                <div className="absolute bottom-2 left-0 right-0 text-center font-hand text-[14px]">Astanapolis</div>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Hand-drawn arrow */}
+          <Reveal delay={900}>
+            <div className="hidden lg:flex absolute left-[34%] top-[40%] -rotate-[14deg] items-center gap-2 z-10">
+              <span className="font-hand text-[22px]" style={{ color: '#E8675D' }}>так выглядит наше лето</span>
+              <svg width="60" height="40" viewBox="0 0 60 40" fill="none">
+                <path d="M 4 8 Q 30 0, 50 32" stroke="#E8675D" strokeWidth="2.5" strokeLinecap="round" fill="none" strokeDasharray="3 4"/>
+                <path d="M 44 26 L 52 32 L 46 38" stroke="#E8675D" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              </svg>
+            </div>
+          </Reveal>
+
+          {/* Bottom wave divider into cream */}
+          <svg className="absolute bottom-0 inset-x-0 w-full h-12" viewBox="0 0 1200 60" preserveAspectRatio="none">
+            <path d="M0 60 L0 30 Q 200 0 400 30 T 800 30 T 1200 30 L 1200 60 Z" fill="#F8EFD9"/>
+          </svg>
+        </section>
+      );
+    }
+
+    // ───────── TRUST STRIP ─────────
+    function Trust() {
+      const items = ['Cambridge English','Forbes Kazakhstan','Kaspi · Halyk 0%','British Council','Best School Awards 2024'];
+      return (
+        <section className="relative py-8 bg-cream">
+          <div className="max-w-[1280px] mx-auto px-5 flex flex-wrap justify-center items-center gap-x-10 gap-y-3">
+            <span className="font-marker text-[15px]" style={{ color: 'rgba(42,38,32,0.55)' }}>нам доверяют:</span>
+            {items.map((it,i) => (
+              <span key={i} className="font-bubble text-[18px]" style={{ color: '#2A2620', opacity: 0.75 }}>{it}</span>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    // ───────── PROGRAMS ─────────
+    function ProgramCard({ p, idx }) {
+      const rotates = [-2, 2, -1.5, 1.5, -2.5];
+      const r = rotates[idx % rotates.length];
+      return (
+        <div className="relative group" style={{ transform: `rotate(${r}deg)`, transition: 'transform 0.3s' }}
+             onMouseEnter={(e) => e.currentTarget.style.transform = 'rotate(0deg) translateY(-6px)'}
+             onMouseLeave={(e) => e.currentTarget.style.transform = `rotate(${r}deg)`}>
+          <div className="polaroid">
+            <div className="tape" style={{ top: -14, left: '50%', transform: 'translateX(-50%) rotate(-5deg)', background: `${p.color}99` }}></div>
+            <div className="aspect-[4/5] overflow-hidden mb-2">
+              <img src={p.photo} alt={p.title}/>
+            </div>
+            <div className="px-1 pb-1">
+              <div className="font-marker text-[14px]" style={{ color: p.color, fontWeight: 700 }}>{p.strap}</div>
+              <div className="bubble bubble-xs leading-tight" style={{ fontSize: '32px', color: p.color, marginBottom: 4 }}>
+                {p.title}
+              </div>
+              <div className="font-marker text-[15px]" style={{ color: 'rgba(42,38,32,0.7)' }}>{p.sub}</div>
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-dashed" style={{ borderColor: 'rgba(42,38,32,0.2)' }}>
+                <span className="font-bubble text-[14px]" style={{ color: '#2A2620' }}>{p.age} лет</span>
+                <span className="font-bubble text-[14px]" style={{ color: '#E8675D' }}>{p.price} ₸/день</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Programs() {
+      return (
+        <section className="relative py-20 lg:py-28">
+          <div className="max-w-[1280px] mx-auto px-5">
+            <div className="text-center mb-14">
+              <Reveal>
+                <div className="font-hand text-[28px] mb-2" style={{ color: '#E8675D' }}>пять направлений</div>
+              </Reveal>
+              <Reveal delay={100}>
+                <div className="bubble" style={{ fontSize: 'clamp(40px, 6vw, 72px)' }}>
+                  <span style={{ color: '#6FB7E6' }}>В</span>
+                  <span style={{ color: '#E8675D' }}>ы</span>
+                  <span style={{ color: '#9DC771' }}>б</span>
+                  <span style={{ color: '#F4C148' }}>е</span>
+                  <span style={{ color: '#F4ABB6' }}>р</span>
+                  <span style={{ color: '#6FB7E6' }}>и</span>
+                  <span> </span>
+                  <span style={{ color: '#E8675D' }}>с</span>
+                  <span style={{ color: '#F4C148' }}>в</span>
+                  <span style={{ color: '#9DC771' }}>о</span>
+                  <span style={{ color: '#F4ABB6' }}>ё</span>
+                </div>
+              </Reveal>
+              <Reveal delay={250}>
+                <p className="font-marker text-[18px] max-w-lg mx-auto mt-4" style={{ color: 'rgba(42,38,32,0.7)' }}>
+                  Каждое лето — пять разных смен. От большого тенниса до Cambridge IELTS. По 2 недели каждая, в любом порядке.
+                </p>
+              </Reveal>
+            </div>
+
+            <Reveal delay={350}>
+              <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8 max-w-[1180px] mx-auto">
+                {PROGRAMS.map((p, i) => <ProgramCard key={p.id} p={p} idx={i}/>)}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    // ───────── DAY (storybook timeline) ─────────
+    function Day() {
+      const stops = [
+        { time: '08:40', label: 'Доброе утро · приём',   color: '#F4C148' },
+        { time: '09:30', label: 'Главный модуль',         color: '#6FB7E6' },
+        { time: '11:30', label: 'English · Soft skills',  color: '#9DC771' },
+        { time: '13:00', label: 'Обед в кафе',            color: '#E8675D' },
+        { time: '14:00', label: 'Спорт · парк ЭКСПО',     color: '#F4ABB6' },
+        { time: '15:30', label: 'Творческий блок',        color: '#F4C148' },
+        { time: '17:00', label: 'Demo Day',               color: '#6FB7E6' },
+        { time: '18:00', label: 'Передача родителям',     color: '#9DC771' },
+      ];
+      return (
+        <section className="relative py-20 lg:py-28" style={{ background: '#F1E4C2' }}>
+          {/* dotted path background */}
+          <svg className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-32 hidden lg:block" viewBox="0 0 1600 100" preserveAspectRatio="none">
+            <path d="M 100 50 Q 350 0 600 60 T 1100 50 T 1500 60" stroke="#E8675D" strokeWidth="4" fill="none" strokeLinecap="round" strokeDasharray="8 12"/>
+          </svg>
+
+          <div className="max-w-[1280px] mx-auto px-5">
+            <div className="text-center mb-12">
+              <Reveal><div className="font-hand text-[28px] mb-2" style={{ color: '#6FB7E6' }}>один день в A+ Camp</div></Reveal>
+              <Reveal delay={100}>
+                <div className="bubble" style={{ fontSize: 'clamp(40px, 6vw, 72px)' }}>
+                  <span style={{ color: '#E8675D' }}>9</span>
+                  <span> </span>
+                  <span style={{ color: '#F4C148' }}>часов</span>
+                  <span> </span>
+                  <span style={{ color: '#9DC771' }}>приключений</span>
+                </div>
+              </Reveal>
+            </div>
+
+            <Reveal delay={200}>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 lg:gap-6">
+                {stops.map((s, i) => (
+                  <div key={i} className="relative" style={{ transform: `rotate(${(i%2 ? 1 : -1) * 1.5}deg)` }}>
+                    <div className="sticker-tag !rounded-2xl !py-4 !px-4 text-center"
+                         style={{ background: s.color, borderColor: '#2A2620' }}>
+                      <div className="font-bubble text-[22px]" style={{ color: '#2A2620' }}>{s.time}</div>
+                      <div className="font-marker text-[14px] mt-1" style={{ color: '#2A2620' }}>{s.label}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    // ───────── QUEST PROOF STRIP ─────────
+    function Proof() {
+      const stats = [
+        { v: '11k+', l: 'родителей в нашем сообществе', c: '#E8675D' },
+        { v: '7 лет', l: 'в Астане с 2017 года',         c: '#6FB7E6' },
+        { v: '4.96', l: 'рейтинг на 2GIS · 248 отзывов', c: '#F4C148' },
+        { v: '1:6',  l: 'педагог на детей',              c: '#9DC771' },
+      ];
+      return (
+        <section className="relative py-20 lg:py-28">
+          <div className="max-w-[1280px] mx-auto px-5 grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-7">
+            {stats.map((s, i) => (
+              <div key={i} className="text-center" style={{ transform: `rotate(${(i%2 ? -1 : 1)}deg)` }}>
+                <div className="bubble" style={{ fontSize: 'clamp(42px, 6vw, 74px)', color: s.c }}>{s.v}</div>
+                <div className="font-marker text-[15px] mt-2 max-w-[170px] mx-auto" style={{ color: 'rgba(42,38,32,0.75)' }}>{s.l}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    // ───────── BIG CTA ─────────
+    function BigCTA() {
+      return (
+        <section id="book" className="relative py-20 lg:py-28" style={{ background: '#BCE3F0' }}>
+          <div className="max-w-[860px] mx-auto px-5 text-center">
+            <Reveal>
+              <div className="bubble mb-3" style={{ fontSize: 'clamp(48px, 8vw, 96px)' }}>
+                <span style={{ color: '#E8675D' }}>Лето </span>
+                <span style={{ color: '#F4C148' }}>2026 </span>
+                <span style={{ color: '#9DC771' }}>ждёт</span>
+              </div>
+            </Reveal>
+            <Reveal delay={100}>
+              <p className="font-marker text-[20px] max-w-lg mx-auto mb-7" style={{ color: '#2A2620' }}>
+                Запись открыта. До 20 мая — ранний доступ со скидкой 15%. Брони без предоплаты, подтверждаем в WhatsApp за 15 минут.
+              </p>
+            </Reveal>
+            <Reveal delay={200}>
+              <div className="flex flex-wrap justify-center gap-3">
+                <a href="https://wa.me/77004349775" target="_blank" rel="noreferrer"
+                   className="cta-big font-bubble px-7 py-4 text-[18px] flex items-center gap-2"
+                   style={{ background: '#25D366' }}>
+                  WhatsApp +7 700 434 9775
+                </a>
+                <a href="tel:+77004349775" className="cta-big font-bubble px-7 py-4 text-[18px]" style={{ background: '#FFFBF0', color: '#2A2620' }}>
+                  Позвонить
+                </a>
+              </div>
+            </Reveal>
+            <Reveal delay={300}>
+              <div className="mt-7 font-marker text-[15px]" style={{ color: 'rgba(42,38,32,0.6)' }}>
+                📍 Толе би 40, Астана 010000 · пн–сб 8:30 — 19:00
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    // ───────── FOOTER ─────────
+    function Footer() {
+      return (
+        <footer className="relative py-10" style={{ background: '#2A2620', color: '#F8EFD9' }}>
+          <div className="max-w-[1280px] mx-auto px-5 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="bubble" style={{ fontSize: 32 }}>
+                <span style={{ color: '#E8675D' }}>A</span>
+                <span style={{ color: '#F4C148', fontSize: 22 }}>+</span>
+                <span style={{ color: '#6FB7E6' }}>C</span>
+                <span style={{ color: '#9DC771' }}>a</span>
+                <span style={{ color: '#F4ABB6' }}>m</span>
+                <span style={{ color: '#E8675D' }}>p</span>
+              </div>
+              <div className="font-marker text-[14px] opacity-70">бренд A SCHOOL · Астана · с 2017</div>
+            </div>
+            <div className="font-marker text-[14px] opacity-65">© 2026 · сделано с ❤ в Астане</div>
+          </div>
+        </footer>
+      );
+    }
+
+    function App() {
+      return (
+        <>
+          <Hero/>
+          <Trust/>
+          <Programs/>
+          <Day/>
+          <Proof/>
+          <BigCTA/>
+          <Footer/>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>
