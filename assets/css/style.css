@@ -580,6 +580,67 @@ p { margin: 0 0 1em; }
   font-weight: 700;
 }
 .price-card .btn { margin-top: auto; align-self: center; }
+.price-card .price-old {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--ink-soft);
+  text-decoration: line-through;
+  text-decoration-thickness: 2.5px;
+  text-decoration-color: var(--coral);
+  margin-top: 4px;
+}
+.price-card .price-discount {
+  display: inline-block;
+  margin: 6px auto 0;
+  padding: 4px 12px;
+  background: var(--coral);
+  color: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--radius-pill);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  box-shadow: 0 3px 0 var(--ink);
+}
+.price-card.featured .price-old { color: rgba(255,251,240,0.7); text-decoration-color: var(--gold); }
+.price-card.featured .price-discount { background: var(--gold); color: var(--ink); }
+
+.early-bird-banner {
+  background: linear-gradient(135deg, var(--coral), var(--coral-dark));
+  color: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-stamp);
+  padding: clamp(20px, 3vw, 32px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.early-bird-banner__badge {
+  font-family: 'Peace Sans', 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 42px);
+  letter-spacing: 0.02em;
+  padding: 8px 22px;
+  background: var(--paper);
+  color: var(--coral-dark);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 4px 0 var(--ink);
+  transform: rotate(-3deg);
+}
+.early-bird-banner__text {
+  font-family: 'Peace Sans', 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: clamp(18px, 2.2vw, 26px);
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.18);
+}
 
 /* ─── Sections specific helpers ─── */
 .split {

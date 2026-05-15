@@ -4,9 +4,11 @@
    Edit SITE_ORIGIN below after first deploy to match the real domain.
 */
 (function () {
-  var SITE_ORIGIN = 'https://acamp.kz';
-  var DEFAULT_IMG = SITE_ORIGIN + '/assets/img/hero.png';
-  var LOGO = SITE_ORIGIN + '/assets/img/logo.png';
+  var SITE_ORIGIN = 'https://timon7182.github.io';
+  var BASE_PATH = '/acamplager';
+  var SITE_BASE = SITE_ORIGIN + BASE_PATH;
+  var DEFAULT_IMG = SITE_BASE + '/assets/img/hero.png';
+  var LOGO = SITE_BASE + '/assets/img/logo.png';
   var PHONE = '+77004349775';
   var EMAIL = 'hello@acamp.kz';
   var ADDRESS_STREET = 'Толе би 40';
@@ -26,10 +28,11 @@
   };
 
   var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  if (!file || file === '') file = 'index.html';
   if (!PAGES[file]) file = 'index.html';
   var page = PAGES[file];
-  var pageUrl = SITE_ORIGIN + '/' + page.path;
-  var pageUrlNoSlash = page.path ? pageUrl : SITE_ORIGIN + '/';
+  var pageUrl = SITE_BASE + '/' + page.path;
+  var pageUrlNoSlash = page.path ? pageUrl : SITE_BASE + '/';
 
   function meta(attr, key, val) {
     var m = document.createElement('meta');
@@ -86,8 +89,8 @@
   meta('name',     'twitter:image',            DEFAULT_IMG);
 
   /* ── Manifest / icons ── */
-  link('manifest', '/manifest.webmanifest');
-  link('apple-touch-icon', '/assets/img/logo.png');
+  link('manifest', 'manifest.webmanifest');
+  link('apple-touch-icon', 'assets/img/logo.png');
 
   /* ── Preconnects (analytics + fonts) ── */
   link('preconnect', 'https://mc.yandex.ru', { crossorigin: '' });
@@ -98,10 +101,10 @@
   jsonLd({
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    '@id': SITE_ORIGIN + '/#organization',
+    '@id': SITE_BASE + '/#organization',
     name: 'A CAMP',
     legalName: 'A CAMP — Astanapolis Summer Camp',
-    url: SITE_ORIGIN + '/',
+    url: SITE_BASE + '/',
     logo: { '@type': 'ImageObject', url: LOGO, width: 512, height: 512 },
     image: DEFAULT_IMG,
     email: EMAIL,
@@ -129,10 +132,10 @@
   jsonLd({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': SITE_ORIGIN + '/#website',
-    url: SITE_ORIGIN + '/',
+    '@id': SITE_BASE + '/#website',
+    url: SITE_BASE + '/',
     name: 'A CAMP',
-    publisher: { '@id': SITE_ORIGIN + '/#organization' },
+    publisher: { '@id': SITE_BASE + '/#organization' },
     inLanguage: ['ru-RU', 'kk-KZ']
   });
 
@@ -144,7 +147,7 @@
     url: pageUrlNoSlash,
     name: page.title,
     description: page.desc,
-    isPartOf: { '@id': SITE_ORIGIN + '/#website' },
+    isPartOf: { '@id': SITE_BASE + '/#website' },
     primaryImageOfPage: { '@type': 'ImageObject', url: DEFAULT_IMG },
     inLanguage: 'ru-RU'
   });
@@ -154,7 +157,7 @@
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: page.crumbs.map(function (c, i) {
-      return { '@type': 'ListItem', position: i + 1, name: c.n, item: SITE_ORIGIN + c.u };
+      return { '@type': 'ListItem', position: i + 1, name: c.n, item: SITE_BASE + c.u };
     })
   });
 
@@ -163,10 +166,10 @@
     jsonLd({
       '@context': 'https://schema.org',
       '@type': ['LocalBusiness', 'Camp', 'ChildCare'],
-      '@id': SITE_ORIGIN + '/#camp',
+      '@id': SITE_BASE + '/#camp',
       name: 'A CAMP — Astanapolis',
       description: 'Авторский летний городской лагерь полного дня для детей 6–11 лет в Астане. Программа Astanapolis: 20 стран за 1 месяц, английский клуб, шахматный клуб, арт-студия, бизнес-идеи, мировая экология. Всё включено.',
-      url: SITE_ORIGIN + '/',
+      url: SITE_BASE + '/',
       image: [DEFAULT_IMG],
       logo: LOGO,
       telephone: PHONE,
@@ -193,10 +196,9 @@
       ],
       audience: { '@type': 'PeopleAudience', suggestedMinAge: 6, suggestedMaxAge: 11 },
       makesOffer: [
-        { '@type': 'Offer', name: 'Неделя', price: '59500', priceCurrency: 'KZT' },
-        { '@type': 'Offer', name: '2 недели', price: '109000', priceCurrency: 'KZT' },
-        { '@type': 'Offer', name: 'Полная смена', price: '199000', priceCurrency: 'KZT' },
-        { '@type': 'Offer', name: 'Пробный день', price: '9900', priceCurrency: 'KZT' }
+        { '@type': 'Offer', name: '1 неделя',           price: '55250',  priceCurrency: 'KZT', description: '65 000 ₸ со скидкой 15% до 20.05' },
+        { '@type': 'Offer', name: '2 недели',           price: '110500', priceCurrency: 'KZT', description: '120 000 ₸ со скидкой 15% до 20.05' },
+        { '@type': 'Offer', name: '4 недели · полная смена', price: '221000', priceCurrency: 'KZT', description: '230 000 ₸ со скидкой 15% до 20.05' }
       ]
     });
 
@@ -226,10 +228,9 @@
       name: 'Летний лагерь A CAMP — пакеты участия',
       brand: { '@type': 'Brand', name: 'A CAMP' },
       offers: [
-        { '@type': 'Offer', name: 'Неделя',         price: '59500',  priceCurrency: 'KZT', availability: 'https://schema.org/InStock' },
-        { '@type': 'Offer', name: '2 недели',       price: '109000', priceCurrency: 'KZT', availability: 'https://schema.org/InStock' },
-        { '@type': 'Offer', name: 'Полная смена',   price: '199000', priceCurrency: 'KZT', availability: 'https://schema.org/InStock' },
-        { '@type': 'Offer', name: 'Пробный день',   price: '9900',   priceCurrency: 'KZT', availability: 'https://schema.org/InStock' }
+        { '@type': 'Offer', name: '1 неделя',                price: '55250',  priceCurrency: 'KZT', availability: 'https://schema.org/InStock', priceValidUntil: '2026-05-20' },
+        { '@type': 'Offer', name: '2 недели',                price: '110500', priceCurrency: 'KZT', availability: 'https://schema.org/InStock', priceValidUntil: '2026-05-20' },
+        { '@type': 'Offer', name: '4 недели · полная смена', price: '221000', priceCurrency: 'KZT', availability: 'https://schema.org/InStock', priceValidUntil: '2026-05-20' }
       ]
     });
   }
@@ -239,7 +240,7 @@
       '@context': 'https://schema.org',
       '@type': 'ContactPage',
       url: pageUrlNoSlash,
-      mainEntity: { '@id': SITE_ORIGIN + '/#organization' }
+      mainEntity: { '@id': SITE_BASE + '/#organization' }
     });
   }
 })();

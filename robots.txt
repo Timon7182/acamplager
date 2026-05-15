@@ -47,5 +47,5 @@ Crawl-delay: 1
 User-agent: Yandex
 Allow: /
 
-Sitemap: https://acamp.kz/sitemap.xml
-Host: acamp.kz
+Sitemap: https://timon7182.github.io/acamplager/sitemap.xml
+Host: timon7182.github.io
