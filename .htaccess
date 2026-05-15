@@ -1,0 +1,121 @@
+# ============================================
+# A CAMP — Apache configuration
+# Place at site root. Requires mod_rewrite, mod_headers, mod_deflate, mod_expires.
+# ============================================
+
+# ─── HTTPS + canonical host ─────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Force www → non-www (uncomment if you prefer non-www)
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+    # Remove trailing index.html from canonical
+    RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
+    RewriteRule ^(.*?)index\.html$ /$1 [R=301,L]
+
+    # Custom 404
+    ErrorDocument 404 /404.html
+</IfModule>
+
+# ─── Default doc + directory listing ────────
+DirectoryIndex index.html
+Options -Indexes
+ServerSignature Off
+
+# ─── MIME types ─────────────────────────────
+<IfModule mod_mime.c>
+    AddType image/svg+xml                 .svg
+    AddType image/webp                    .webp
+    AddType image/avif                    .avif
+    AddType application/manifest+json     .webmanifest
+    AddType application/json              .json
+    AddType application/ld+json           .jsonld
+    AddType text/cache-manifest           .appcache
+    AddType video/mp4                     .mp4 .MP4
+    AddType font/woff2                    .woff2
+    AddCharset UTF-8                      .html .css .js .xml .json .txt
+</IfModule>
+
+# ─── Compression ────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript \
+        application/javascript application/json application/ld+json application/xml \
+        application/rss+xml application/atom+xml image/svg+xml application/manifest+json \
+        font/ttf font/otf application/x-font-ttf application/x-font-opentype
+</IfModule>
+
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/xml text/css \
+        text/javascript application/javascript application/json application/ld+json \
+        application/xml image/svg+xml application/manifest+json
+</IfModule>
+
+# ─── Cache (Expires) ────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault                                "access plus 1 month"
+    ExpiresByType text/html                       "access plus 0 seconds"
+    ExpiresByType text/css                        "access plus 1 year"
+    ExpiresByType application/javascript          "access plus 1 year"
+    ExpiresByType text/javascript                 "access plus 1 year"
+    ExpiresByType image/png                       "access plus 1 year"
+    ExpiresByType image/jpeg                      "access plus 1 year"
+    ExpiresByType image/webp                      "access plus 1 year"
+    ExpiresByType image/svg+xml                   "access plus 1 year"
+    ExpiresByType image/x-icon                    "access plus 1 year"
+    ExpiresByType video/mp4                       "access plus 1 month"
+    ExpiresByType font/woff2                      "access plus 1 year"
+    ExpiresByType application/manifest+json       "access plus 1 week"
+    ExpiresByType application/xml                 "access plus 1 hour"
+    ExpiresByType text/xml                        "access plus 1 hour"
+    ExpiresByType application/ld+json             "access plus 0 seconds"
+</IfModule>
+
+# ─── Cache-Control (immutable for hashed/static) ─
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|woff2|woff|ttf|otf|svg|png|jpg|jpeg|gif|webp|avif|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "public, max-age=0, must-revalidate"
+    </FilesMatch>
+    <FilesMatch "\.(xml|txt)$">
+        Header set Cache-Control "public, max-age=3600"
+    </FilesMatch>
+
+    # ─── Security headers ─────────────────
+    Header set X-Content-Type-Options       "nosniff"
+    Header set X-Frame-Options              "SAMEORIGIN"
+    Header set Referrer-Policy              "strict-origin-when-cross-origin"
+    Header set Permissions-Policy           "geolocation=(), microphone=(), camera=()"
+    Header set Strict-Transport-Security    "max-age=31536000; includeSubDomains" env=HTTPS
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+
+    # CORS for fonts/assets
+    <FilesMatch "\.(woff2|woff|ttf|otf|eot|svg|jpg|jpeg|png|webp)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+
+    # Remove ETag in favor of Cache-Control
+    Header unset ETag
+</IfModule>
+FileETag None
+
+# ─── Block hidden / sensitive files ─────────
+<FilesMatch "^\.(?!well-known)|^task\.txt$|^README\.md$|^DEPLOY\.md$|^nginx\.conf\.example$">
+    Require all denied
+</FilesMatch>
+# Explicitly allow .well-known (security.txt, ACME, etc.)
+<Directory ".well-known">
+    Require all granted
+</Directory>
+
+# ─── UTF-8 default ──────────────────────────
+AddDefaultCharset UTF-8

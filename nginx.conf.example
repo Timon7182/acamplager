@@ -1,0 +1,117 @@
+# ============================================
+# A CAMP — Nginx server block (example)
+# Copy into /etc/nginx/sites-available/acamp.conf, then:
+#   ln -s /etc/nginx/sites-available/acamp.conf /etc/nginx/sites-enabled/
+#   nginx -t && systemctl reload nginx
+# Replace /var/www/acamp with your real document root.
+# Replace SSL cert paths after issuing certbot certificate.
+# ============================================
+
+# Force HTTP → HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name acamp.kz www.acamp.kz;
+    return 301 https://acamp.kz$request_uri;
+}
+
+# Force www → non-www on HTTPS
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name www.acamp.kz;
+
+    ssl_certificate     /etc/letsencrypt/live/acamp.kz/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/acamp.kz/privkey.pem;
+
+    return 301 https://acamp.kz$request_uri;
+}
+
+# Main site
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name acamp.kz;
+
+    root /var/www/acamp;
+    index index.html;
+    charset utf-8;
+
+    ssl_certificate     /etc/letsencrypt/live/acamp.kz/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/acamp.kz/privkey.pem;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 1d;
+    ssl_stapling        on;
+    ssl_stapling_verify on;
+
+    # ── Security headers ─────────────────
+    add_header X-Content-Type-Options       "nosniff" always;
+    add_header X-Frame-Options              "SAMEORIGIN" always;
+    add_header Referrer-Policy              "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy           "geolocation=(), microphone=(), camera=()" always;
+    add_header Strict-Transport-Security    "max-age=31536000; includeSubDomains" always;
+    add_header Cross-Origin-Opener-Policy   "same-origin" always;
+
+    # ── Compression ──────────────────────
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_min_length 256;
+    gzip_types
+        text/plain text/css text/xml application/json application/ld+json
+        application/javascript application/xml application/xml+rss
+        application/manifest+json image/svg+xml font/ttf font/otf;
+
+    # If you have brotli compiled in:
+    # brotli on;
+    # brotli_static on;
+    # brotli_types text/plain text/css application/json application/ld+json
+    #              application/javascript image/svg+xml application/xml;
+
+    # ── MIME + caching ───────────────────
+    types {
+        application/manifest+json webmanifest;
+        application/ld+json       jsonld;
+        video/mp4                 mp4 MP4;
+    }
+
+    # Strip trailing index.html
+    rewrite ^/(.*/)?index\.html$ /$1 permanent;
+
+    # Long-cache static assets
+    location ~* \.(css|js|woff2?|ttf|otf|svg|png|jpe?g|gif|webp|avif|ico)$ {
+        expires 1y;
+        add_header Cache-Control "public, max-age=31536000, immutable" always;
+        access_log off;
+        try_files $uri =404;
+    }
+
+    # Short cache for HTML, sitemap, robots
+    location ~* \.(html?)$ {
+        expires 0;
+        add_header Cache-Control "public, max-age=0, must-revalidate" always;
+    }
+    location = /sitemap.xml { expires 1h; add_header Cache-Control "public, max-age=3600"; }
+    location = /robots.txt  { expires 1h; add_header Cache-Control "public, max-age=3600"; }
+    location = /llms.txt    { expires 1h; add_header Cache-Control "public, max-age=3600"; }
+
+    # Allow .well-known (security.txt, ACME challenges) but hide other dotfiles
+    location ^~ /.well-known/ { allow all; }
+    location ~ /\.            { deny all; access_log off; log_not_found off; }
+    location = /task.txt      { deny all; }
+    location = /DEPLOY.md     { deny all; }
+    location = /README.md     { deny all; }
+    location = /nginx.conf.example { deny all; }
+
+    # Custom 404
+    error_page 404 /404.html;
+    location = /404.html { internal; }
+
+    # SPA-like clean URLs (try file → file.html → 404)
+    location / {
+        try_files $uri $uri/ $uri.html =404;
+    }
+}
