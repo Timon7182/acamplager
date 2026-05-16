@@ -109,13 +109,10 @@ ServerSignature Off
 FileETag None
 
 # ─── Block hidden / sensitive files ─────────
+# .well-known is excluded via the (?!well-known) lookahead so ACME / security.txt still work.
 <FilesMatch "^\.(?!well-known)|^task\.txt$|^README\.md$|^DEPLOY\.md$|^nginx\.conf\.example$">
     Require all denied
 </FilesMatch>
-# Explicitly allow .well-known (security.txt, ACME, etc.)
-<Directory ".well-known">
-    Require all granted
-</Directory>
 
 # ─── UTF-8 default ──────────────────────────
 AddDefaultCharset UTF-8
