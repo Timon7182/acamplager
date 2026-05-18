@@ -33,7 +33,7 @@
     <div class="container">
       <div class="breadcrumbs"><a href="index.html" data-i18n="nav.home">Главная</a><span>›</span><span data-i18n="nav.contacts">Контакты</span></div>
       <h1 data-i18n="page.contacts.title">Контакты</h1>
-      <p class="lead center" style="margin: 0 auto;" data-i18n="page.contacts.lead">Мы в Астане. Свяжитесь любым удобным способом.</p>
+      <p class="lead center" style="margin: 0 auto;" data-i18n="page.contacts.lead">Мы в Астане. Свяжитесь любым удобным способом — ответим в WhatsApp.</p>
     </div>
   </section>
 
@@ -42,9 +42,9 @@
 
       <div class="split reveal">
         <div>
-          <span class="eyebrow">Запись на пробный</span>
+          <span class="eyebrow">Бронирование</span>
           <h2 class="title-lg">Оставьте заявку</h2>
-          <p class="lead">Перезвоним в течение 15 минут в рабочее время или ответим в WhatsApp.</p>
+          <p class="lead">Ответим в WhatsApp или по телефону и забронируем место в смене.</p>
 
           <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
             <a class="btn btn--wa" href="https://wa.me/77004349775" target="_blank" rel="noopener" style="align-self: flex-start;">
@@ -70,8 +70,8 @@
           </div>
         </div>
 
-        <form class="form-card" onsubmit="event.preventDefault(); const m=encodeURIComponent('Заявка на пробный: '+this.cname.value+', '+this.cphone.value+', '+this.cage.value+' лет. '+this.cmsg.value); window.open('https://wa.me/77004349775?text='+m,'_blank');">
-          <h3 class="title-md" style="margin-bottom: 18px;">Записаться на пробный</h3>
+        <form class="form-card" onsubmit="event.preventDefault(); const m=encodeURIComponent('Бронирование места: '+this.cname.value+', '+this.cphone.value+', '+this.cage.value+' лет. '+this.cmsg.value); window.open('https://wa.me/77004349775?text='+m,'_blank');">
+          <h3 class="title-md" style="margin-bottom: 18px;">Забронировать место</h3>
           <label for="cname" data-i18n="form.name">Имя ребёнка</label>
           <input id="cname" name="cname" type="text" required />
 
@@ -92,7 +92,7 @@
           <label for="cmsg" data-i18n="form.message">Комментарий</label>
           <textarea id="cmsg" name="cmsg" placeholder="Любая информация, которая поможет нам подготовиться"></textarea>
 
-          <button type="submit" class="btn btn--coral" style="width: 100%; justify-content: center;" data-i18n="form.submit">Записаться на пробный</button>
+          <button type="submit" class="btn btn--coral" style="width: 100%; justify-content: center;" data-i18n="form.submit">Забронировать место</button>
           <p style="font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft); margin-top: 14px; text-align: center;" data-i18n="form.privacy">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных.</p>
         </form>
       </div>
