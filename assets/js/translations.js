@@ -13,8 +13,7 @@ window.I18N = {
 
     "cta.call": "Позвонить",
     "cta.whatsapp": "WhatsApp",
-    "cta.trial": "Забронировать место",
-    "cta.book": "Забронировать",
+    "cta.book": "Забронировать место",
     "cta.address": "Адрес",
     "cta.prices": "Цены",
     "cta.more": "Подробнее",
@@ -126,8 +125,7 @@ window.I18N = {
 
     "cta.call": "Қоңырау шалу",
     "cta.whatsapp": "WhatsApp",
-    "cta.trial": "Орынды брондау",
-    "cta.book": "Брондау",
+    "cta.book": "Орынды брондау",
     "cta.address": "Мекенжай",
     "cta.prices": "Бағалар",
     "cta.more": "Толығырақ",
