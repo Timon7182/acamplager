@@ -68,7 +68,7 @@ p { margin: 0 0 1em; }
 /* ─── Typography ─── */
 .font-bubble { font-family: 'Fredoka', sans-serif; font-weight: 700; letter-spacing: -0.01em; }
 .font-hand { font-family: 'Caveat', cursive; font-weight: 700; }
-.font-marker { font-family: 'Patrick Hand', 'Neucha', sans-serif; }
+.font-marker { font-family: 'Neucha', sans-serif; }
 .font-peace { font-family: 'Peace Sans', 'Fredoka', sans-serif; font-weight: 700; letter-spacing: 0.01em; }
 
 .bubble {
@@ -117,7 +117,7 @@ p { margin: 0 0 1em; }
 .title-md { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: clamp(22px, 3vw, 30px); }
 
 .lead {
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: clamp(17px, 1.8vw, 21px);
   color: var(--ink-soft);
   max-width: 640px;
@@ -449,7 +449,7 @@ p { margin: 0 0 1em; }
   margin-bottom: 12px;
 }
 .breadcrumbs {
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: 16px;
   color: var(--ink-soft);
 }
@@ -478,7 +478,7 @@ p { margin: 0 0 1em; }
   font-size: clamp(20px, 2.2vw, 24px);
   margin-bottom: 8px;
 }
-.card p { font-family: 'Patrick Hand', 'Neucha', sans-serif; font-size: 17px; color: var(--ink-soft); margin: 0; }
+.card p { font-family: 'Neucha', sans-serif; font-size: 17px; color: var(--ink-soft); margin: 0; }
 .card__icon {
   width: 56px; height: 56px;
   display: flex;
@@ -555,7 +555,7 @@ p { margin: 0 0 1em; }
   margin: 14px 0 4px;
 }
 .price-card .price-unit {
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: 16px;
   color: var(--ink-soft);
   margin-bottom: 18px;
@@ -572,7 +572,7 @@ p { margin: 0 0 1em; }
   gap: 8px;
 }
 .price-card li {
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: 17px;
   padding-left: 28px;
   position: relative;
@@ -728,7 +728,7 @@ p { margin: 0 0 1em; }
   margin: 0 0 8px;
 }
 .media-card__body p {
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: 17px;
   color: var(--ink-soft);
   margin: 0;
@@ -794,8 +794,8 @@ p { margin: 0 0 1em; }
   box-shadow: 0 3px 0 var(--ink);
 }
 .feature-row h2 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: clamp(28px, 4vw, 42px); margin-bottom: 12px; }
-.feature-row p { font-family: 'Patrick Hand', 'Neucha', sans-serif; font-size: clamp(17px, 1.6vw, 19px); color: var(--ink-soft); }
-.feature-row ul { font-family: 'Patrick Hand', 'Neucha', sans-serif; font-size: 17px; line-height: 1.8; padding-left: 18px; }
+.feature-row p { font-family: 'Neucha', sans-serif; font-size: clamp(17px, 1.6vw, 19px); color: var(--ink-soft); }
+.feature-row ul { font-family: 'Neucha', sans-serif; font-size: 17px; line-height: 1.8; padding-left: 18px; }
 @media (max-width: 760px) {
   .feature-row { grid-template-columns: 1fr; }
   .feature-row.reverse > div:first-child { order: 0; }
@@ -845,7 +845,7 @@ p { margin: 0 0 1em; }
   display: block;
 }
 .mentor h4 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 4px; }
-.mentor p { font-family: 'Patrick Hand', 'Neucha', sans-serif; font-size: 15px; color: var(--ink-soft); margin: 0; }
+.mentor p { font-family: 'Neucha', sans-serif; font-size: 15px; color: var(--ink-soft); margin: 0; }
 
 /* Schedule list */
 .schedule-list {
@@ -878,7 +878,7 @@ p { margin: 0 0 1em; }
   font-size: 17px;
 }
 .schedule-row .desc {
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: 15px;
   color: var(--ink-soft);
   margin-top: 2px;
@@ -946,7 +946,7 @@ p { margin: 0 0 1em; }
 }
 .video-card .meta { padding: 16px 20px; }
 .video-card h3 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 4px; }
-.video-card p { font-family: 'Patrick Hand', 'Neucha', sans-serif; font-size: 15px; color: var(--ink-soft); margin: 0; }
+.video-card p { font-family: 'Neucha', sans-serif; font-size: 15px; color: var(--ink-soft); margin: 0; }
 
 /* Map */
 .map-frame {
@@ -1065,7 +1065,7 @@ p { margin: 0 0 1em; }
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: 16px;
 }
 .footer-grid a { transition: color 0.15s ease; }
@@ -1096,7 +1096,7 @@ p { margin: 0 0 1em; }
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 12px;
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: 14px;
   opacity: 0.7;
 }
@@ -1148,7 +1148,7 @@ p { margin: 0 0 1em; }
   letter-spacing: 0.01em;
 }
 .lore-card p {
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: clamp(17px, 1.7vw, 20px);
   color: var(--ink);
   margin: 0 0 10px;
@@ -1165,7 +1165,7 @@ p { margin: 0 0 1em; }
   border: 2.5px solid var(--ink);
   border-radius: var(--radius-md);
   padding: 12px 16px;
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: 17px;
   display: flex;
   flex-direction: column;
@@ -1217,7 +1217,7 @@ p { margin: 0 0 1em; }
   letter-spacing: 0.02em;
 }
 .coin-banner p {
-  font-family: 'Patrick Hand', 'Neucha', sans-serif;
+  font-family: 'Neucha', sans-serif;
   font-size: clamp(17px, 1.7vw, 19px);
   margin: 0;
   opacity: 0.95;

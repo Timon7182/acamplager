@@ -53,7 +53,7 @@
             <div class="brand" style="margin-bottom: 14px;">
               <img src="assets/img/logo.png" alt="A CAMP" style="filter: brightness(0) invert(1);" />
             </div>
-            <p style="font-family: 'Patrick Hand', cursive; font-size: 16px; opacity: 0.78;" data-i18n="footer.about">A CAMP — авторский летний лагерь в Астане.</p>
+            <p style="font-family: 'Neucha', sans-serif; font-size: 17px; opacity: 0.85;" data-i18n="footer.about">A CAMP — авторский летний лагерь в Астане.</p>
           </div>
           <div>
             <h4 data-i18n="footer.menu">Меню</h4>
